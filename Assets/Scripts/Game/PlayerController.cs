@@ -1,0 +1,74 @@
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private BoxCollider2D _boundaries;
+    [SerializeField] private Transform _fruitThrowTransform;
+
+    [SerializeField] private Sprite idleSprite;
+    [SerializeField] private Sprite throwSprite;
+
+    private SpriteRenderer spriteRenderer;
+
+    private Bounds _bounds;
+
+    private float _leftBound;
+    private float _rightBound;
+
+    private float _startingLeftBound;
+    private float _startingRightBound;
+
+    private float _offset;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private void Awake()
+    {
+        _bounds = _boundaries.bounds;
+
+        _offset = transform.position.x - _fruitThrowTransform.position.x;
+
+        _leftBound = _bounds.min.x + _offset;
+        _rightBound = _bounds.max.x + _offset;
+
+        _startingLeftBound = _leftBound;
+        _startingRightBound = _rightBound;
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        Vector3 newPosition = transform.position + new Vector3(UserInput.MoveInput.x * _moveSpeed * Time.deltaTime, 0f, 0f);
+        newPosition.x = Mathf.Clamp(newPosition.x, _leftBound, _rightBound);
+
+        transform.position = newPosition;
+    }
+
+    public void ChangeBoundary(float extraWidth)
+    {
+        _leftBound = _startingLeftBound;
+        _rightBound = _startingRightBound;
+
+        _leftBound += ThrowFruitController.instance.Bounds.extents.x + extraWidth;
+        _rightBound -= ThrowFruitController.instance.Bounds.extents.x + extraWidth;
+    }
+
+    public void SetThrowingSprite()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sprite = throwSprite;
+            CancelInvoke(nameof(ResetSprite)); // на случай повторного вызова
+            Invoke(nameof(ResetSprite), 0.3f); // вернуть через 0.3 секунды
+        }
+    }
+
+    private void ResetSprite()
+    {
+        if (spriteRenderer != null)
+            spriteRenderer.sprite = idleSprite;
+    }
+
+}
