@@ -5,7 +5,7 @@ public class ThrowFruitController : MonoBehaviour
     public static ThrowFruitController instance;
 
     public GameObject CurrentFruit { get; set; }
-    [SerializeField] private Transform _fruitTransform;
+    [SerializeField] private Transform _throwFruitTransform;
     [SerializeField] private Transform _parentAfterThrow;
     [SerializeField] private FruitSelector _selector;
 
@@ -54,7 +54,8 @@ public class ThrowFruitController : MonoBehaviour
 
     public void SpawnAFruit(GameObject fruit)
     {
-        GameObject go = Instantiate(fruit, _fruitTransform);
+        GameObject go = Instantiate(fruit, _throwFruitTransform);
+        go.transform.localScale = Vector3.one;
         CurrentFruit = go;
         _circleCollider = CurrentFruit.GetComponent<CircleCollider2D>();
         Bounds = _circleCollider.bounds;
