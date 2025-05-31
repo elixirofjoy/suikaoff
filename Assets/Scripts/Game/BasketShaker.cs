@@ -20,10 +20,10 @@ public class BasketShaker : MonoBehaviour
 
     public void ShakeBasket()
     {
-        if (!isShaking && GameManager.instance.CurrentScore > 199)
+        if (!isShaking && GameManager.instance.CurrentScore > 149)
         {
             StartCoroutine(ShakeRoutine());
-            GameManager.instance.DecreaseScore(200);
+            GameManager.instance.DecreaseScore(150);
         }
     }
 
