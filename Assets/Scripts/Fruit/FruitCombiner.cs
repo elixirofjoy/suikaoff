@@ -64,14 +64,13 @@ public class FruitCombiner : MonoBehaviour
 
         if (combineEffectPrefab != null)
         {
-            Instantiate(combineEffectPrefab, transform.position, Quaternion.identity);
+            GameObject effect = Instantiate(combineEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(effect, 2f); // уничтожить через 2 секунды (или столько, сколько длится эффект)
         }
 
         SoundFXManager.instance.PlaySoundFXClip(combineSoundClip, transform, 1f);
 
         GameObject go = FruitSelector.instance.Fruits[index + 1];
-
-        Destroy(Instantiate(combineEffectPrefab, transform.position, Quaternion.identity));
 
         return go;
     }
